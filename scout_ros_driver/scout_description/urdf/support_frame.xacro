@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<robot name="support_frame" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <link name="support_frame">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://scout_description/meshes/asm.stl"/>
+      </geometry>
+      <material name="">
+          <color rgba="0 0 0 1"/>
+      </material>
+    </visual>
+  </link>
+
+
+</robot>

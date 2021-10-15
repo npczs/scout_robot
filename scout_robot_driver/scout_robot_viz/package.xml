@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>scout_robot_viz</name>
+  <version>1.1.0</version>
+  <description>Rviz config for scout_robot view</description>
+
+  <maintainer email="ye.tian@iquotient-robotics.com">Ye Tian</maintainer>
+
+  <license>MIT</license>
+
+  <url type="website">https://github.com/I-Quotient-Robotics/scout_robot_driver</url>
+  <url type="repository">https://github.com/I-Quotient-Robotics/scout_robot_driver</url>
+  <url type="bugtracker">https://github.com/I-Quotient-Robotics/scout_robot_driverr/issues</url>
+
+  <author email="ye.tian@iquotient-robotics.com">Ye Tian</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <depend>rviz</depend>
+
+  <export>
+  </export>
+</package>

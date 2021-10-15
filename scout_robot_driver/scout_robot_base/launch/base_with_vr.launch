@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="scout_port" default="/dev/scout_base"/>
+  <arg name="enable_ekf" default="false"/>
+
+  <param name="robot_description" command="$(find xacro)/xacro.py $(find scout_robot_description)/urdf/scout_robot.xacro"/>
+
+  <!-- SCOUT harware driver -->
+  <node pkg="scout_base" type="scout_base_node" name="scout_base_node" output="screen">
+    <param name="scout_com" value="$(arg scout_port)"/>
+  </node>
+
+  <!-- Differential controller parameters and basic localization -->
+  <include file="$(find scout_control)/launch/control.launch">
+    <arg name="enable_odom_tf" value="false" if="$(arg enable_ekf)"/>
+  </include>
+
+  <!-- joy control -->
+  <include file="$(find iqr_teleop)/launch/joy_teleop.launch"/>
+
+  <!-- pan_tilt and joy control for pan_tilt -->
+  <include file="$(find pan_tilt_bringup)/launch/panTilt_bringup.launch" />
+  <!-- <node name="pan_tilt_control" pkg="pan_tilt_driver" type="pan_tilt_control.py" output="screen"/> -->
+
+  <!-- DK -->
+  <group ns="k4a" >
+    <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager" output="screen">
+      <!-- <param name="num_worker_threads" value="16" /> -->
+    </node>
+
+    <node pkg="nodelet" type="nodelet" name="k4a_ros_bridge"
+          args="load Azure_Kinect_ROS_Driver/K4AROSBridgeNodelet nodelet_manager --no-bond"
+          respawn="true">
+      <param name="fps"               value="15" />
+      <param name="depth_enabled"     value="true" />
+      <param name="depth_mode"        value="NFOV_2X2BINNED" />
+      <param name="color_enabled"     value="true" />
+      <param name="color_resolution"  value="720P" />
+      <param name="point_cloud"       value="false" />
+      <param name="rgb_point_cloud"   value="false" />
+      <param name="required"          value="true" />
+      <!-- <param name="tf_prefix"         value="kinect_" /> -->
+      <param name="overwrite_robot_description" value="false" />
+    </node>
+
+    <node pkg="nodelet" type="nodelet" name="rectify_rgb"
+          args="load image_proc/rectify nodelet_manager --no-bond"
+          respawn="true">
+      <remap from="camera_info"  to="rgb/camera_info" />
+      <remap from="image_mono"  to="rgb/image_raw" />
+      <remap from="image_rect"  to="rgb/image_rect" />
+    </node>
+
+    <node pkg="nodelet" type="nodelet" name="rectify_rgb_to_depth"
+          args="load image_proc/rectify nodelet_manager --no-bond"
+          respawn="true">
+      <remap from="camera_info"  to="rgb_to_depth/camera_info" />
+      <remap from="image_mono"  to="rgb_to_depth/image_raw" />
+      <remap from="image_rect"  to="rgb_to_depth/image_rect" />
+    </node>
+
+    <node pkg="nodelet" type="nodelet" name="rectify_depth"
+          args="load image_proc/rectify nodelet_manager --no-bond"
+          respawn="true">
+      <remap from="camera_info"  to="depth/camera_info" />
+      <remap from="image_mono"  to="depth/image_raw" />
+      <remap from="image_rect"  to="depth/image_rect" />
+    </node>
+  </group>
+
+  <!-- <node name="web_video_server_node" pkg="web_video_server" type="web_video_server" respawn="true" output="screen"/> -->
+
+  <!-- Robot pose ekf -->
+  <group if="$(arg enable_ekf)">
+    <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf" output="screen">
+      <param name="output_frame" value="odom"/>
+      <param name="base_footprint_frame" value="base_footprint"/>
+      <param name="freq" value="50.0"/>
+      <param name="sensor_timeout" value="1.0"/>
+      <param name="odom_used" value="true"/>
+      <param name="imu_used" value="true"/>
+      <param name="vo_used" value="false"/>
+      <param name="debug" value="false"/>
+      <param name="self_diagnose" value="false"/>
+      <remap from="imu_data" to="/imu/data"/>
+      <remap from="odom" to="/scout_velocity_controller/odom"/>
+    </node>
+  </group>
+
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+		<arg name="port" value="9090"/>
+    <arg name="bson_only_mode" value="true" />
+	</include>
+
+	<node name="file_server" pkg="file_server" type="file_server" output="screen"/>
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find scout_robot_viz)/rviz/view.rviz"/>
+</launch>

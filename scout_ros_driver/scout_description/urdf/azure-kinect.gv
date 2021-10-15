@@ -1,0 +1,11 @@
+digraph G {
+node [shape=box];
+"camera_base" [label="camera_base"];
+"camera_body" [label="camera_body"];
+"camera_visor" [label="camera_visor"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"camera_base" -> "camera_base_to_body" [label="xyz: -0.0757 0 0.008 \nrpy: 0 -0 0"]
+"camera_base_to_body" -> "camera_body"
+"camera_base" -> "camera_base_to_visor" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"camera_base_to_visor" -> "camera_visor"
+}

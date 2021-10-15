@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>scout_robot_base</name>
+  <version>0.0.0</version>
+  <description>The scout_robot_base package</description>
+
+  <maintainer email="ye@iquotient-robotics.com">Ye Tian</maintainer>
+
+  <license>MIT</license>
+
+  <url type="website">https://github.com/I-Quotient-Robotics/scout_robot_driver</url>
+  <url type="repository">https://github.com/I-Quotient-Robotics/scout_robot_driver</url>
+  <url type="bugtracker">https://github.com/I-Quotient-Robotics/scout_robot_driverr/issues</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>rospy</exec_depend>
+
+
+
+  <export>
+
+
+  </export>
+</package>

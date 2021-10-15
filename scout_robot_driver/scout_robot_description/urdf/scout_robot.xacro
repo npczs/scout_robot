@@ -1,0 +1,38 @@
+<?xml version = "1.0"?>
+<robot name = "scout_robot" xmlns:xacro = "http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find scout_robot_description)/urdf/gazebo.xacro" />
+
+  <!-- scout include -->
+  <xacro:include filename = "$(find scout_description)/urdf/scout_v2_xacro.xacro" />
+  
+  <!-- sensors -->
+  <xacro:include filename="$(find pan_tilt_description)/urdf/pan_tilt.urdf.xacro" />
+  <xacro:include filename="$(find scout_description)/urdf/azure_kinect.urdf.xacro" />
+  
+  <!-- support_frame -->
+  <xacro:include filename="$(find scout_description)/urdf/support_frame.xacro" />
+  <!--xacro:scout_v2/-->
+
+  <xacro:scout_v2 />
+
+  <!-- support_frame  -->
+  <joint name="support_frame_to_mid_mount" type="fixed">
+    <parent link="mid_mount" />
+    <child link="support_frame" />
+    <origin xyz="-0.07 0 0" rpy="0 0 0" />
+  </joint>
+
+  <!-- pan tilt  -->
+  <xacro:pan_tilt parent="support_frame" >
+    <origin xyz="0.15 0 0.123" rpy="0 0 0" />
+  </xacro:pan_tilt>
+
+  <!-- DK  -->
+  <joint name="camera_base_to_mid_mount" type="fixed">
+    <parent link="pan_tilt_surface" />
+    <child link="camera_base" />
+    <origin xyz="0.061 0 0.0035" rpy="0 0 0" />
+  </joint>
+
+</robot>

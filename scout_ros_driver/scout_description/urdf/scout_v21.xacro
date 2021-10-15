@@ -1,0 +1,24 @@
+<?xml version = "1.0"?>
+<robot name = "scout_robot" xmlns:xacro = "http://www.ros.org/wiki/xacro">
+ 
+
+  <!-- scout include -->
+  <xacro:include filename = "$(find scout_description)/urdf/scout_v2.xacro" />
+
+
+  
+  <!-- sensors -->
+  <!--xacro:include filename="$(find pan_tilt_description)/urdf/pan_tilt.urdf.xacro" /-->
+  <!--xacro:include filename="$(find Azure_Kinect_ROS_Driver)/urdf/azure_kinect.urdf.xacro" /-->
+
+  <!-- scout and scout_body -->
+  
+  <!--xacro:scout_v2/-->
+
+
+  <!-- pan tilt -->
+  <!--xacro:pan_tilt parent="mid_mount" >
+    <origin xyz="0 0 0.3" rpy="0 0 0" />
+  </xacro:pan_tilt-->
+
+</robot>
